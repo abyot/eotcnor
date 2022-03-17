@@ -12,5 +12,11 @@
     </action>
   </package>
 
+  <package name="dhis-web-eotcnor-members" extends="dhis-web-commons" namespace="/dhis-web-eotcnor-members">
+      <action name="index" class="org.hisp.dhis.commons.action.NoAction">
+          <result name="success" type="redirect">index.html</result>
+      </action>
+  </package>
+
   <!-- INJECT BUNDLED APPS HERE -->
 </struts>
