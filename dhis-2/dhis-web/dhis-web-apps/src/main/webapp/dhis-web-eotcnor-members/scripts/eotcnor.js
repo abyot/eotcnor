@@ -204,7 +204,7 @@ function getRelationshipTypes(){
         if(res.length > 0){
             return;
         }
-        return dhis2.metadata.getMetaObjects('relationshipTypes', 'relationshipTypes', dhis2.eotcnor.apiUrl + '/relationshipTypes.json', 'fields=id,displayName,fromToName,toFromName,toContraint,fromConstraint&paging=false', 'idb', dhis2.eotcnor.store);
+        return dhis2.metadata.getMetaObjects('relationshipTypes', 'relationshipTypes', dhis2.eotcnor.apiUrl + '/relationshipTypes.json', 'fields=id,displayName,fromToName,toFromName,toContraint,fromConstraint&&filter=fromConstraint.relationshipEntity:eq:TRACKED_ENTITY_INSTANCE&filter=toConstraint.relationshipEntity:eq:TRACKED_ENTITY_INSTANCE&paging=false', 'idb', dhis2.eotcnor.store);
     });
 }
 

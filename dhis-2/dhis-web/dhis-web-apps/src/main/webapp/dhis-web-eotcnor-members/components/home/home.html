@@ -68,8 +68,14 @@
                                     class="btn btn-default"
                                     ng-if="!model.displaysearchTei"
                                     ng-disabled="addOrEditTeiDenied() || !model.selectedProgram || !selectedOrgUnit || isOnAddEditMode()"
-                                    ng-click="showsearchTei()">
+                                    ng-click="showSearchTei()">
                                 {{'search'| translate}}
+                            </button>
+                            <button type="button"
+                                    class="btn btn-warning"
+                                    ng-if="model.filterExists"
+                                    ng-click="clearSearchParams()">
+                                {{'clear_search'| translate}}
                             </button>
                             <button type="button"
                                     class="btn btn-warning"

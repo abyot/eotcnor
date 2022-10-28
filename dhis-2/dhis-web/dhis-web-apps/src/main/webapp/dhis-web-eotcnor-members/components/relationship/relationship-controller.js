@@ -1,4 +1,4 @@
-/* global angular, dhis2, tei */
+/* global angular, dhis2, tei, eotcnor */
 
 'use strict';
 
@@ -13,33 +13,23 @@ eotcnor.controller('RelationshipController',
                 ModalService,
                 CommonUtils,
                 tei,
-                selectedEvent,
-                stage,
                 program,
-                enrollment,
+                relationshipTypes,
+                trackedEntityAttributes,
                 dataElementsById,
-                optionSetsById
-                ) {
+                optionSetsById,
+                selectedOrgUnit) {
 
     $scope.tei = tei;
-    $scope.stage = stage;
     $scope.program = program;
-    $scope.enrollment = enrollment;
-    $scope.dataElementsById = dataElementsById;
-    $scope.optionSetsById = optionSetsById;
 
-    if ( selectedEvent && selectedEvent.event ){
-        $scope.selectedEvent = selectedEvent;
-    }
-    else{
-        $scope.selectedEvent = {
-            program: $scope.program.id,
-            programStage: $scope.stage.id,
-            orgUnit: $scope.tei.orgUnit,
-            enrollment: $scope.tei.enrollment,
-            trackedEntityInstance: $scope.tei.trackedEntityInstance
-        };
-    }
+    console.log('tei:  ', tei);
+    console.log('program:  ', program);
+    console.log('relationshipTypes:  ', relationshipTypes);
+    console.log('trackedEntityAttributes:  ', trackedEntityAttributes);
+    console.log('dataElementsById:  ', dataElementsById);
+    console.log('optionSetsById:  ', optionSetsById);
+    console.log('selectedOrgUnit:  ', selectedOrgUnit);
 
     $scope.saveStatus = function(){
         //check for form validity

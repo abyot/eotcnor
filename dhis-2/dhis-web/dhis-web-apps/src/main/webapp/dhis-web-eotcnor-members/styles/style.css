@@ -52,6 +52,11 @@ html, body {
     }
 }
 
+.modal-full-window .modal-dialog {
+    width: 75%;
+    height: 100%;
+}
+
 #leftBar {
     padding: 10px 0;
     margin-top: 4px;

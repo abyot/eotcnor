@@ -1,4 +1,4 @@
-/* global angular, dhis2, art */
+/* global angular, dhis2, eotcnor */
 
 'use strict';
 
@@ -38,7 +38,8 @@ eotcnor.controller('HomeController',
         editProfile: false,
         inputFile: null,
         sortHeader: null,
-        membershipDate: null
+        membershipDate: null,
+        filterExists: false
     };
 
     //Paging
@@ -157,6 +158,8 @@ eotcnor.controller('HomeController',
                     Paginator.setPageSize($scope.pager.pageSize);
                     Paginator.setItemCount($scope.pager.total);
                 }
+
+
             });
         }
     };
@@ -184,8 +187,15 @@ eotcnor.controller('HomeController',
         $scope.model.tei[$scope.model.membershipDate.id] = DateUtils.getToday();
     };
 
-    $scope.showsearchTei = function(){
+    $scope.showSearchTei = function(){
         $scope.model.displaysearchTei = true;
+    };
+
+    $scope.clearSearchParams = function(){
+        $scope.filterParam = '';
+        $scope.filterText = {};
+        $scope.model.filterExists = false;
+        $scope.fetchTeis();
     };
 
     $scope.addTei = function(){
@@ -239,7 +249,7 @@ eotcnor.controller('HomeController',
     $scope.searchTei = function(){
 
         $scope.filterParam = '';
-        var filterExists = false;
+        $scope.model.filterExists = false;
 
         angular.forEach($scope.model.teiHeaders, function(header){
             if ( $scope.filterText[header.id] ){
@@ -248,7 +258,7 @@ eotcnor.controller('HomeController',
                         var filters = $scope.filterText[header.id].map(function(filt) {return filt.code;});
                         if( filters.length > 0 ){
                             $scope.filterParam += '&filter=' + header.id + ':IN:' + filters.join(';');
-                            filterExists = true;
+                            $scope.model.filterExists = true;
                         }
                     }
                 }
@@ -257,22 +267,22 @@ eotcnor.controller('HomeController',
                         $scope.filterParam += '&filter=' + header.id;
                         if( $scope.filterText[header.id].start ){
                             $scope.filterParam += ':GT:' + $scope.filterText[header.id].start;
-                            filterExists = true;
+                            $scope.model.filterExists = true;
                         }
                         if( $scope.filterText[header.id].end ){
                             $scope.filterParam += ':LT:' + $scope.filterText[header.id].end;
-                            filterExists = true;
+                            $scope.model.filterExists = true;
                         }
                     }
                 }
                 else{
                     $scope.filterParam += '&filter=' + header.id + ':like:' + $scope.filterText[header.id];
-                    filterExists = true;
+                    $scope.model.filterExists = true;
                 }
             }
         });
 
-        if ( filterExists ){
+        if ( $scope.model.filterExists ){
             $scope.fetchTeis('DESCENDANTS');
             $scope.model.displaysearchTei = false;
         }
@@ -288,11 +298,6 @@ eotcnor.controller('HomeController',
 
     $scope.removeEndFilterText = function(gridColumnId){
         $scope.filterText[gridColumnId].end = undefined;
-    };
-
-    $scope.resetFilter = function(){
-        $scope.filterText = angular.copy($scope.emptyFilterText);
-        $scope.filterTeis(null, true);
     };
 
     $scope.showEditTei = function(_selectedTei){
@@ -573,6 +578,41 @@ eotcnor.controller('HomeController',
 
         modalInstance.result.then(function (gridColumns) {
             $scope.model.teiHeaders = gridColumns;
+        });
+    };
+
+    $scope.showAddRelationship = function(){
+        var modalInstance = $modal.open({
+            templateUrl: 'components/relationship/tei-relationship.html',
+            controller: 'RelationshipController',
+            windowClass: 'modal-full-window',
+            resolve: {
+                tei: function(){
+                    return angular.copy($scope.model.tei);
+                },
+                program: function(){
+                    return $scope.model.selectedProgram;
+                },
+                relationshipTypes: function(){
+                    return $scope.model.relationshipTypes;
+                },
+                trackedEntityAttributes: function(){
+                    return $scope.model.trackedEntityAttributes;
+                },
+                dataElementsById: function(){
+                    return $scope.model.dataElementsById;
+                },
+                optionSetsById: function(){
+                    return $scope.model.optionSets;
+                },
+                selectedOrgUnit: function(){
+                    return $scope.selectedOrgUnit;
+                }
+            }
+        });
+
+        modalInstance.result.then(function( tei ) {
+            $scope.model.tei = angular.copy(tei);
         });
     };
 

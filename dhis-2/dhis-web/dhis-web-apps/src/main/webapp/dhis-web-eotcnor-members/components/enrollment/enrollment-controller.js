@@ -1,4 +1,4 @@
-/* global angular, dhis2, art */
+/* global angular, dhis2, eotcnor */
 
 'use strict';
 
